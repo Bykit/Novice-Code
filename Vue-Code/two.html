@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>two</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+
+    <!-- sample-1 -->
+    <div id="app-1">
+        <span>Message: {{ msg }}</span><br>
+        <span v-once>这个将不会改变: {{ msg }}</span><br>
+        <input type="text" v-model="msg">
+    </div>
+    <script>
+        let vm1=new Vue({
+            el:'#app-1',
+            data:{
+                msg:'123'
+            }
+        })
+    </script>
+
+    <!-- sample-2 -->
+    <div id="app-2">
+        
+        <p>Using mustaches: {{ rawHtml }}</p>
+        <p>Using v-html directive: <span v-html="rawHtml"></span></p>
+    </div>
+    <script>
+        let vm2=new Vue({
+            el:'#app-2',
+            data:{
+                rawHtml:'<span style="color: red;">This should be red</span>'
+            }
+        })
+    </script>
+
+    <!-- sample-3 -->
+    <div id="app-3">
+        <div v-bind:id="dynamicId"></div>
+        <button v-bind:disabled="isButtonDisabled">Button</button>
+        <div>{{ number + 1 }}</div>
+        <div>{{ ok ? 'YES' : 'NO' }}</div>
+        <a v-on:click="doSomething">...</a>
+        <h1 v-bind:[ac]="ab">动态参数</h1>
+        <!-- 下面这些为是缩写 -->
+        <h1 :[ac]="ab">动态参数</h1>   
+        <a @click="doSomething">...</a>
+        
+    </div>
+    <script>
+        let vm3=new Vue({
+            el:'#app-3',
+            data:{
+                dynamicId:'abc',
+                isButtonDisabled:'false',
+                number:10,
+                ok:false,
+                doSomething(){
+                    alert("hello world")
+                },
+                ac:'style',
+                ab:'color: red;',
+            }
+            
+        })
+    </script>
+
+    <!-- sample-4 -->
+    <div id="example">
+        <p>Original message: "{{ message }}"</p>
+        <p>Computed reversed message: "{{ reversedMessage }}"</p>
+        <p>Reversed message: "{{ ReversedMessage() }}"</p>
+    </div>
+    <script>
+        var vm4 = new Vue({
+            el: '#example',
+            data: {
+                message: 'Hello'
+            },
+            computed: {
+                // 计算属性的 getter
+                reversedMessage: function () {
+                // `this` 指向 vm 实例
+                return this.message.split('').reverse().join('')
+                }
+            },
+            methods: {
+                ReversedMessage: function () {
+                    return this.message.split('').reverse().join('')
+                }
+            }
+        })
+    </script>
+
+    <!-- sample-5 -->
+    <div id="demo">{{ fullName }}</div>
+    <script>
+        var vm5 = new Vue({
+            el: '#demo',
+            data: {
+                firstName: 'Foo',
+                lastName: 'Bar',
+                // fullName: 'Foo Bar'
+            },
+            // watch: {
+            //     firstName: function (val) {
+            //     this.fullName = val + ' ' + this.lastName
+            //     },
+            //     lastName: function (val) {
+            //     this.fullName = this.firstName + ' ' + val
+            //     }
+            // },
+            computed: {
+                fullName: function () {
+                return this.firstName + ' ' + this.lastName
+                }
+            }
+        })
+    </script>
+
+
+</body>
+</html>
