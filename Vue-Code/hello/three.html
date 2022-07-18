@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>three</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <!-- app-1 -->
+    <div id="app-1">{{message}}</div>
+    <script>
+        let a=new Vue({
+            el:'#app-1',
+            data:{
+                message:'Hello World!'
+            }
+        })
+    </script>
+
+    <!-- app-2 -->
+    <div id="app-2">
+        <p v-if="message==1">first</p>
+        <p v-else-if="message==2">second</p>
+        <p v-else="message">third</p>
+    </div>
+    <script>
+        let a2=new Vue({
+            el:'#app-2',
+            data:{
+                message:'2'
+            }
+        })
+    </script>
+
+    <!-- app-3 -->
+    <div id="app-3">
+        <li v-for="mes in message">{{mes}}</li>
+    </div>
+    <script>
+        let a3=new Vue({
+            el:'#app-3',
+            data:{
+                message:['A','B','C']
+            }
+        })
+    </script>
+
+    <!-- app-4 -->
+    <div id="app-4">
+        <h1 v-bind:title="message">鼠标停留</h1>
+    </div>
+    <script>
+        let a4=new Vue({
+            el:'#app-4',
+            data:{
+                message:'嘿嘿'
+            }
+        })
+    </script>
+
+    <!-- app-5 -->
+    <div id="app-5">
+        <button v-on:click="sayHello">click me</button>
+    </div>
+    <script>
+        let a5=new Vue({
+            el:'#app-5',
+            data:{
+                message:'嘿嘿'
+            },
+            methods:{
+                sayHello:function(){
+                    alert(this.message)
+                }
+            }
+        })
+    </script>
+
+    <!-- app-6 -->
+    <div id="app-6">
+        <input type="text" v-model="message">{{message}}
+        <textarea name="" id="" cols="30" rows="10" v-model="message"></textarea>
+    </div>
+    <script>
+        let a6=new Vue({
+            el:'#app-6',
+            data:{
+                message:'嘿嘿'
+            }
+        })
+    </script>
+
+    <!-- app-7 -->
+    <div id="app-7">
+        <input type="radio" value="男" v-model="message">男
+        <input type="radio" value="女" v-model="message">女
+        <p>你选择的是:{{message}}</p>
+    </div>
+    <script>
+        let a7=new Vue({
+            el:'#app-7',
+            data:{
+                message:'嘿嘿'
+            }
+        })
+    </script>
+
+    <!-- app-8 -->
+    <div id="app-8">
+        <select v-model="message">
+            <option value="" disabled>--请选择--</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+        </select>
+        {{message}}
+    </div>
+    <script>
+        let a8=new Vue({
+            el:'#app-8',
+            data:{
+                message:''
+            }
+        })
+    </script>
+
+    <!-- app-9 -->
+    <div id="app-9">
+        <Hello v-bind:todo="message"></Hello>
+    </div>
+    <script>
+        Vue.component('Hello',{
+            props:['todo'],
+            template:'<p>{{todo}}</p>'
+        })
+        let a9=new Vue({
+            el:'#app-9',
+            data:{
+                message:'Hi vue.js'
+            }
+        })
+    </script>
+
+    <!-- app-10 -->
+    <!-- 存在跨域问题，issue -->
+    <div id="app-10">
+        <div>{{info.name}}</div>
+        <div>{{info.number}}</div>
+        <a v-bind:href="info.url">云端小屋</a>
+    </div>
+    <script>
+        let a10=new Vue({
+            el:'#app-10',
+            data:{
+                info:{
+                    name: null,
+                    url: null,
+                    number: null
+                }
+            },
+            mounted(){
+                axios.get('./data.json').then(response=>(this.info=response.data));
+            }
+            
+        })
+    </script>
+
+    <!-- app-11 -->
+    <div id="app-11">
+        <p>{{number}}</p>
+    </div>
+    <script>
+        let a11=new Vue({
+            el:'#app-11',
+            data:{
+                A:1,
+                B:Date.now()
+            },
+            computed:{
+                number:function(){
+                    return this.A + this.B
+                }
+            }
+            
+        })
+    </script>
+
+    <hr>
+
+    <!-- app-12 -->
+    <div id="app-12">
+        <todo>
+            <acc slot="A" v-bind:add="adc"></acc>
+            <todolist slot="B" v-for="(a,index) in ccc" :bbb="a" :ddd="index" v-on:wi="remove(index)"></todolist>
+        </todo>
+    </div>
+    <script>
+        Vue.component('todo',{
+            template:
+            '<div>\
+                <P>SDAS</P>\
+                <slot name="A"></slot>\
+                <ul>\
+                    <slot name="B"></slot>\
+                </ul>\
+            </div>'
+        })
+        Vue.component('acc',{
+            props:['add'],
+            template:'<h1>{{add}}</h1>'
+        })
+        Vue.component('todolist',{
+            props:['bbb','ddd'],
+            template:'<li>{{bbb}}<button @click="hi">删除</button></li>',
+            methods:{
+                hi:function(ddd){
+                    this.$emit('wi',ddd);
+                }
+            }
+        })
+        let a12=new Vue({
+            el:'#app-12',
+            data:{
+                adc:"hhhhhhh",
+                ccc:['Monday','Tuesday','Wednesday']
+            },
+            methods:{
+                remove:function(index){
+                    this.ccc.splice(index,1);
+                }
+            }
+        })
+    </script>
+
+</body>
+</html>
